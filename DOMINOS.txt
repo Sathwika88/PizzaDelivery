@@ -1,0 +1,900 @@
+package dominosproject;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.io.*;//for file writer class
+import java.util.ArrayList;
+class login extends JFrame{//login is class extending JFrame container
+	
+	JTextField t1,t2;
+	JButton b1,b2;
+	JLabel l1,l2,l3,l4,l5;
+	login(){
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLayout(null);
+		getContentPane().setBackground(new Color(200,160,200));
+		l1=new JLabel("Login");
+		l1.setFont(new Font("Times New Roman",Font.BOLD,30));
+		l1.setForeground(Color.black);
+		l1.setBounds(160, 10, 300, 30);
+		add(l1);
+		
+		l2=new JLabel("Username");
+		l2.setFont(new Font("Times New Roman",Font.PLAIN,15));
+		l2.setForeground(Color.black);
+		l2.setBounds(60, 60, 300, 30);
+		add(l2);
+		
+		l3=new JLabel("Password");
+		l3.setFont(new Font("Times New Roman",Font.PLAIN,15));
+		l3.setForeground(Color.black);
+		l3.setBounds(60, 100, 300, 30);
+		add(l3);
+		
+		l5=new JLabel("New User?");
+		l5.setBounds(80,180,300,30);
+		add(l5);
+		t1=new JTextField(60);
+		t2=new JPasswordField(60);
+		b1=new JButton("Login");
+		b2=new JButton("Signup");
+		t1.setBounds(140,60,120,30);
+		t2.setBounds(140,100,120,30);
+		b1.setBounds(155,140,80,30);
+		b1.setFocusable(false);
+		b2.setFocusable(false);
+		b2.setBounds(155,180,80,30);
+		l4=new JLabel("");
+		l4.setBounds(280,80,400,30);
+		add(l4);
+		
+		JLabel l4SecondLine = new JLabel("");
+		l4SecondLine.setBounds(280, 110, 300, 30);
+		add(l4SecondLine);
+		
+		add(t1);
+		add(t2);
+		add(b1);
+		add(b2);
+		
+		b1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { 
+				boolean matched=false;
+				String uname=t1.getText().toString();
+				String pwd=t2.getText().toString();
+				try {
+				FileReader fr=new FileReader("login.txt");
+				BufferedReader br=new BufferedReader(fr);//reads line by line
+				String line;
+				while((line=br.readLine())!=null) {
+					String[] data=line.split("\t");
+					if(data.length>=2 && data[0].equals(uname)&& data[1].equals(pwd)) {
+						matched=true;
+						break;
+					}
+				}
+				fr.close();
+				}
+				catch(Exception ae) {
+					
+				}
+				if(matched) {
+					dispose();
+					//it will dispose the current frame and opens the pizza class 
+					Pizza frame=new Pizza();
+					frame.setBounds(400, 200,400,400);
+					frame.setTitle("FOOD ORDERING APPLICATION");
+					frame.setVisible(true);
+				}
+				else{
+					l4.setText("Invalid username or password");
+					l4SecondLine.setText("***IF NEW USER, SIGNUP***");
+					
+				}
+				
+			}
+		});
+		
+		b2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				signup s=new signup();
+				s.setVisible(true);
+				s.setBounds(400,150,500,500);
+				s.setTitle("REGISTRATION");
+			}
+		});
+	}
+	class signup extends JFrame{
+		JLabel username,pass,cpass,mobile,l1;
+		JTextField t1,t2,t3,t4;
+		JButton submit;
+		signup(){
+			setLayout(null);
+			getContentPane().setBackground(new Color(200,160,200));
+			t1=new JTextField(60);
+			t2=new JPasswordField(60);
+			t3=new JPasswordField(60);
+			t4=new JTextField(60);
+			submit=new JButton("Submit");
+			t1.setBounds(150,20,80,30);
+			t2.setBounds(150,60,80,30);
+			t3.setBounds(150,100,80,30);
+			t4.setBounds(150,140,80,30);
+			
+			submit.setBounds(100,180,80,30);
+			submit.setFocusable(false);
+			username=new JLabel("Username");
+			username.setFont(new Font("Times New Roman",Font.PLAIN,15));
+			username.setForeground(Color.black);
+			username.setBounds(20, 20, 300, 30);
+			add(username);
+			
+			pass=new JLabel("Password");
+			pass.setFont(new Font("Times New Roman",Font.PLAIN,15));
+			pass.setForeground(Color.black);
+			pass.setBounds(20, 60, 300, 30);
+			add(pass);
+			
+			cpass=new JLabel("Confirm Password");
+			cpass.setFont(new Font("Times New Roman",Font.PLAIN,15));
+			cpass.setForeground(Color.black);
+			cpass.setBounds(20, 100, 300, 30);
+			add(cpass);
+			
+			mobile=new JLabel("Mobile");
+			mobile.setFont(new Font("Times New Roman",Font.PLAIN,15));
+			mobile.setForeground(Color.black);
+			mobile.setBounds(20, 140, 300, 30);
+			add(mobile);
+			
+			l1=new JLabel("");
+			l1.setBounds(230, 90, 300, 30);
+			add(l1);
+			
+			submit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent a) {
+					if(validForm()) {
+					try {
+						FileWriter fw=new FileWriter("login.txt",true);//append mode , every time value will  be entered
+						fw.write(t1.getText()+"\t"+t2.getText()+"\t"+t3.getText()+"\t"+t4.getText()+"\n");
+						fw.close();
+						JFrame f=new JFrame();
+						JOptionPane.showMessageDialog(f, "Registration completed");
+						dispose();
+					} 
+					catch (IOException e) { }
+				}
+					else {
+						JFrame f=new JFrame();
+						JOptionPane.showMessageDialog(f, "Please fill all the required fields");
+					}
+				}
+
+				private boolean validForm() {
+					// TODO Auto-generated method stub
+					if(t1.getText().isEmpty()||t2.getText().isEmpty()||t3.getText().isEmpty()||t4.getText().isEmpty()) {
+						return false;
+					}
+					String mb=t4.getText();
+					String no="^[6-9]\\d{9}$";//validation of 10 digit mobile number using regular expression
+					if(!mb.matches(no)) {
+						JOptionPane.showMessageDialog(null,"please enter valid 10 digit phone number","error",JOptionPane.ERROR_MESSAGE);
+						return false;
+					}
+					if(!(t2.getText().equals(t3.getText()))) {
+						l1.setText("Passwords don't match");
+						return false;
+					}
+					return true;
+				}
+			});
+			
+			add(t1);
+			add(t2);
+			add(t3);
+			add(t4);
+			add(submit);
+		}
+	}
+	public class Pizza extends JFrame{
+		
+		JLabel l1,l2;
+		ButtonGroup grp;
+		JLabel billingname;
+		JLabel address;
+		JLabel mobile;
+		JLabel type;
+		static JTextField t1;
+		static JTextField t2;
+		static JTextField t3;
+		static JRadioButton dineinbutton;
+		static JRadioButton  takeawaybutton;
+		static JRadioButton  deliverybutton;
+		JButton submit;
+		Pizza(){
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLayout(null);
+		l1=new JLabel("DOMINOS"); 
+		l1.setFont(new Font("Times New Roman",Font.BOLD,20));
+		l1.setForeground(Color.BLUE);
+		l1.setBounds(150,10, 300, 30);//before adding label only set  the bounds
+		
+		l2=new JLabel();
+		l2.setText("Welcome, what do you want to order today!!");
+		l2.setBounds(90, 35, 300, 20);
+		
+		billingname= new JLabel("Enter Billing name");
+		billingname.setFont(new Font("Times New Roman",Font.PLAIN,14));
+		billingname.setBounds(20, 60, 300, 15);
+		
+		address=new JLabel("Enter Address");
+		address.setFont(new Font("Times New Roman",Font.PLAIN,14));
+		address.setBounds(20, 110, 300, 50);
+		
+		mobile=new JLabel("Enter Mobile Number");
+		mobile.setFont(new Font("Times New Roman",Font.PLAIN,14));
+		mobile.setBounds(20, 165, 300, 50);
+		
+		type=new JLabel("Select type");
+		type.setFont(new Font("Times New Roman",Font.PLAIN,14));
+		type.setBounds(20, 210, 300, 40);
+		
+		t1=new JTextField();
+		t1.setFont(new Font("Tahoma",Font.PLAIN,14));
+		t1.setBounds(177,58,170,29);
+		add(t1);
+		t1.setColumns(5);
+		
+		t2=new JTextField();
+		t2.setFont(new Font("Tahoma",Font.PLAIN,14));
+		t2.setBounds(177,110,170,50);
+		add(t2);
+		t2.setColumns(5);
+		
+		t3=new JTextField();
+		t3.setFont(new Font("Tahoma",Font.PLAIN,14));
+		t3.setBounds(177,175,170,29);
+		add(t3);
+		t3.setColumns(5);
+		
+		dineinbutton=new JRadioButton();
+		takeawaybutton=new JRadioButton();
+		deliverybutton=new JRadioButton();
+		
+		grp= new ButtonGroup();
+		grp.add(deliverybutton);
+		grp.add(dineinbutton);
+		grp.add(takeawaybutton);
+		
+		dineinbutton.setText("dinein");
+		dineinbutton.setFocusable(false);
+		dineinbutton.setFont(new Font("Tahoma",Font.PLAIN,12));
+		dineinbutton.setBounds(177, 205, 300, 50);
+	
+		takeawaybutton.setText("takeaway");
+		takeawaybutton.setFocusable(false);
+		takeawaybutton.setFont(new Font("Tahoma",Font.PLAIN,12));
+		takeawaybutton.setBounds(177, 240, 300, 50);
+		
+		deliverybutton.setText("delivery");
+		deliverybutton.setFocusable(false);
+		deliverybutton.setFont(new Font("Tahoma",Font.PLAIN,12));
+		deliverybutton.setBounds(177, 275, 300, 50);
+		
+		submit=new JButton();
+		this.submit.setText("Submit");
+		this.submit.setFocusable(false);
+		this.submit.setFont(new Font("Tahoma",Font.PLAIN,12));
+		this.submit.setBounds(130,330,100,20);
+		
+		add(l1);
+		add(l2);
+		add(billingname);
+		add(address);
+		add(mobile);
+		add(type);
+		add(dineinbutton);
+		add(takeawaybutton);
+		add(deliverybutton);
+		
+
+		submit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String validationMessage=validateForm();
+				if(validationMessage==null) {
+				
+				newpizza frame = new newpizza();
+				dispose();
+				frame.setTitle("PIZZA DELIVERY");
+				frame.setBounds(200,20,900,700);
+				frame.setVisible(true);
+			}
+				else {
+					JOptionPane.showMessageDialog(null,"Please fill all the required fields correctly","ERROR",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		add(submit);
+		}
+		private  String validateForm() {
+			if(t1.getText().isEmpty()||t2.getText().isEmpty()||t3.getText().isEmpty()||(!dineinbutton.isSelected()&&!takeawaybutton.isSelected()&&!deliverybutton.isSelected())) {
+				return "Please fill all the fields";//invalid form
+			}
+			String mb=t3.getText();
+			String no="^[6-9]\\d{9}$";//validation of 10 digit mobile number using reg exp
+			if(!mb.matches(no)) {
+				//JOptionPane.showMessageDialog(null,"please enter valid 10 digit phone number","error",JOptionPane.ERROR_MESSAGE);
+				return "Please enter a valid 10 digit number";
+			}
+			return null;
+		}
+	}
+	class newpizza extends JFrame
+	{
+	private int[] defaultPrices = {250, 200, 300, 280, 230, 270, 320, 350, 330, 310};
+	JTextField t1,t2,t3,t4,t5,t6,t7,t8,t9,t10;
+	JTextField[] quantityTextFields;
+	JLabel l1,l2,l3,l4,l5,l6,l7,l8,l9,l10;
+	JLabel size;
+	
+	JCheckBox small,medium,large;
+	ButtonGroup group;
+	JButton b1;
+	private int totalPizzaPrice = 0;
+	
+	newpizza()
+	{
+	setDefaultCloseOperation(EXIT_ON_CLOSE);
+	setLayout(null);
+	
+	 ImageIcon pizzaImage = new ImageIcon("F://dominosproject//src//dominosproject//pic1.jpg");
+     Image image = pizzaImage.getImage(); // transform it
+     Image newimg = image.getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH); // scaling the img
+     pizzaImage = new ImageIcon(newimg);  // transform it back
+     JLabel imageLabel = new JLabel(pizzaImage);
+     imageLabel.setBounds(50, 400, 100, 100);
+     add(imageLabel);
+     
+     ImageIcon pizzaImage1 = new ImageIcon("F://dominosproject//src//dominosproject//pic2.jpg");
+     Image image1 = pizzaImage1.getImage(); // transform it
+     Image newimg1 = image1.getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH); // scaling the img
+     pizzaImage1 = new ImageIcon(newimg1);  // transform it back
+     JLabel imageLabel1 = new JLabel(pizzaImage1);
+     imageLabel1.setBounds(190, 400, 100, 100);
+     add(imageLabel1);
+     
+
+     ImageIcon pizzaImage2 = new ImageIcon("F://dominosproject//src//dominosproject//pic3.jpg");
+     Image image2 = pizzaImage2.getImage(); // transform it
+     Image newimg2 = image2.getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH); // scaling the img
+     pizzaImage2 = new ImageIcon(newimg2);  // transform it back
+     JLabel imageLabel2 = new JLabel(pizzaImage2);
+     imageLabel2.setBounds(330, 400, 100, 100);
+     add(imageLabel2);
+     
+     ImageIcon pizzaImage3 = new ImageIcon("F://dominosproject//src//dominosproject//pic4.jpg");
+     Image image3 = pizzaImage3.getImage(); // transform it
+     Image newimg3 = image3.getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH); // scaling the img
+     pizzaImage3 = new ImageIcon(newimg3);  // transform it back
+     JLabel imageLabel3 = new JLabel(pizzaImage3);
+     imageLabel3.setBounds(470, 400, 100, 100);
+     add(imageLabel3);
+     
+     ImageIcon pizzaImage4 = new ImageIcon("F://dominosproject//src//dominosproject//pic5.jpg");
+     Image image4 = pizzaImage4.getImage(); // transform it
+     Image newimg4 = image4.getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH); // scaling the img
+     pizzaImage4 = new ImageIcon(newimg4);  // transform it back
+     JLabel imageLabel4 = new JLabel(pizzaImage4);
+     imageLabel4.setBounds(610, 400, 100, 100);
+     add(imageLabel4);
+     
+	l1 = new JLabel("Margherita pizza");
+	l1.setFont(new Font("Times New Roman",Font.PLAIN,20));
+	l1.setBounds(50,90,250,25);
+	add(l1);
+	
+	l2 = new JLabel("Peppey Paneer");
+	l2.setFont(new Font("Times New Roman",Font.PLAIN,20));
+	l2.setBounds(400,90,250,25);
+	add(l2);
+	
+	l3 = new JLabel("Chicken Sausage");
+	l3.setFont(new Font("Times New Roman",Font.PLAIN,20));
+	l3.setBounds(50,150,250,25);
+	add(l3);
+	
+	l4 = new JLabel("Barbeque Pizza");
+	l4.setFont(new Font("Times New Roman",Font.PLAIN,20));
+	l4.setBounds(400,150,250,25);
+	add(l4);
+	
+	l5 = new JLabel("Cheese n corn");
+	l5.setFont(new Font("Times New Roman",Font.PLAIN,20));
+	l5.setBounds(50,210,250,25);
+	add(l5);
+	
+	l6 = new JLabel("Double Cheese");
+	l6.setFont(new Font("Times New Roman",Font.PLAIN,20));
+	l6.setBounds(400,210,250,25);
+	add(l6);
+	
+	l7 = new JLabel("Spiced Chicken");
+	l7.setFont(new Font("Times New Roman",Font.PLAIN,20));
+	l7.setBounds(50,270,250,25);
+	add(l7);
+	
+	l8 = new JLabel("Chicken Dominator");
+	l8.setFont(new Font("Times New Roman",Font.PLAIN,20));
+	l8.setBounds(400,270,250,25);
+	add(l8);
+	
+	l9 = new JLabel("Chicken Pepperoni");
+	l9.setFont(new Font("Times New Roman",Font.PLAIN,20));
+	l9.setBounds(50,340,250,25);
+	add(l9);
+	
+	l10 = new JLabel("Pepper Chicken");
+	l10.setFont(new Font("Times New Roman",Font.PLAIN,20));
+	l10.setBounds(400,340,250,25);
+	add(l10);
+	
+	t1 = new JTextField();
+	t1.setBounds(230,90,120,25);
+	add(t1);
+	
+	t2 = new JTextField();
+	t2.setBounds(600,90,120,25);
+	add(t2);
+	
+	t3 = new JTextField();
+	t3.setBounds(230,150,120,25);
+	add(t3);
+	
+	t4 = new JTextField();
+	t4.setBounds(600,150,120,25);
+	add(t4);
+	
+	t5 = new JTextField();
+	t5.setBounds(230,210,120,25);
+	add(t5);
+	
+	t6 = new JTextField();
+	t6.setBounds(600,210,120,25);
+	add(t6);
+	
+	t7 = new JTextField();
+	t7.setBounds(230,270,120,25);
+	add(t7);
+	
+	t8 = new JTextField();
+	t8.setBounds(600,270,120,25);
+	add(t8);
+	
+	t9 = new JTextField();
+	t9.setBounds(230,340,120,25);
+	add(t9);
+	
+	t10 = new JTextField();
+	t10.setBounds(600,340,120,25);
+	add(t10);
+	
+	b1 = new JButton("ADD TO CART");
+	b1.setForeground(Color.BLUE);
+	b1.setFont(new Font("Times New Roman",Font.BOLD,20));
+	b1.setBounds(330,550,200,30);
+	b1.setFocusable(false);
+	add(b1);
+
+	quantityTextFields = new JTextField[]{t1, t2, t3, t4, t5, t6, t7, t8, t9, t10};
+
+b1.addActionListener(new ActionListener()
+{
+	public void actionPerformed(ActionEvent e)
+	{
+		if(validform2())
+		{
+			ArrayList<String> selectedPizzaLabels = getSelectedPizzaLabels();
+			cart obj=new cart(selectedPizzaLabels, newpizza.this);
+			dispose();
+			obj.setBounds(280,150,500,500);
+			obj.setForeground(Color.black);
+			obj.setTitle("Add to cart");
+			obj.setVisible(true);	
+		}	
+	}
+			
+});
+
+}
+private ArrayList<String> getSelectedPizzaLabels() {
+ArrayList<String> selectedPizzaLabels = new ArrayList<String>();
+
+for (int i = 0; i < defaultPrices.length; i++) {
+      String pizzaName = getPizzaName(i);
+      String quantityText = quantityTextFields[i].getText().trim();
+	if (!quantityText.isEmpty())
+	{
+      	try
+		{
+          	int quantity = Integer.parseInt(quantityText);
+      		if (quantity > 0)
+			{
+          			int pizzaPrice = quantity * defaultPrices[i];
+          			totalPizzaPrice=totalPizzaPrice+pizzaPrice;
+          			selectedPizzaLabels.add(pizzaName + " - Quantity: " + quantity + " - Total Price: " +pizzaPrice);
+      		}
+  		}
+		catch (NumberFormatException e) 
+		{
+          		JOptionPane.showMessageDialog(null, "Invalid quantity for " + pizzaName, "ERROR", JOptionPane.ERROR_MESSAGE, null);
+		}
+	}
+}
+  return selectedPizzaLabels;
+}
+private String getPizzaName(int index) {
+  switch (index) {
+      case 0: return "Margherita pizza";
+      case 1: return "Peppey Paneer";
+      case 2: return "Chicken Sausage";
+      case 3: return "Barbeque Pizza";
+      case 4: return "Cheese n corn";
+      case 5: return "Double Cheese";
+      case 6: return "Spiced Chicken";
+      case 7: return "Chicken Dominator";
+      case 8: return "Chicken Pepperoni";
+      case 9: return "Pepper Chicken";
+      default: return "Unknown Pizza";
+  }
+}
+
+
+private boolean validform2() {
+  boolean isPizzaSelected = !t1.getText().isEmpty() || !t2.getText().isEmpty() || !t3.getText().isEmpty() ||
+          !t4.getText().isEmpty() || !t5.getText().isEmpty() || !t6.getText().isEmpty() || !t7.getText().isEmpty() ||
+          !t8.getText().isEmpty() || !t9.getText().isEmpty() || !t10.getText().isEmpty();
+
+  if (!isPizzaSelected ) {
+      JOptionPane.showMessageDialog(null, "Please select any pizza", "ERROR", JOptionPane.ERROR_MESSAGE, null);
+      return false;
+  }
+
+  return true;
+}
+
+class cart extends JFrame{
+	protected final String pizzaLabel = null;
+	JLabel l1,cartLabel,label;
+	JButton customizeButton;
+	private int totalPrice=0;
+	private JLabel tplabel;
+	int bill=0;
+	JLabel billamt;
+	JButton submit;
+	JButton confirm;
+	boolean isOrderplaced=false;
+	cart(ArrayList<String> selectedPizzaLabels,newpizza parentFrame){
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	  	setSize(200, 200);
+	  	setLocation(200, 200);
+	  	setTitle("Shopping Cart");
+	  	setVisible(true);		
+		//setLayout(new BorderLayout());
+		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS)); 
+		l1=new JLabel("Cart");
+		l1.setForeground(Color.black);
+		l1.setBounds(250, 25, 300, 30);
+		cartLabel = new JLabel("");
+      cartLabel.setForeground(new Color(0, 0, 0));
+      cartLabel.setBounds(100, 50, 500, 30);
+      add(cartLabel);
+      add(l1);
+      //getContentPane().setBackground(Color.GRAY);
+      
+      for (String pizzaLabel : selectedPizzaLabels) {
+          JLabel label = new JLabel(pizzaLabel);
+          label.setForeground(new Color(0, 0, 0));
+          add(label);
+
+          JButton customizeButton = new JButton("Customize");
+          customizeButton.setFocusable(false);
+          customizeButton.setForeground(Color.black);
+          customizeButton.addActionListener(new ActionListener() {
+              public void actionPerformed(ActionEvent e) {
+                  CustomizationFrame frame2 = new CustomizationFrame(cart.this);
+                  frame2.setTitle("Toppings");
+                  frame2.setBounds(300, 100, 500, 500);
+                  frame2.setVisible(true);
+              }
+
+          });
+  		add(customizeButton);
+  		
+      }
+      
+      tplabel=new JLabel("Toppings Price: Rs "+totalPrice	);
+      tplabel.setBounds(100,350,200,30);
+      add(tplabel);
+      billamt=new JLabel("Bill: Rs"+bill);
+      billamt.setBounds(10,450,300,30);
+      add(billamt);
+      submit=new JButton("Get Bill");
+      submit.setFocusable(false);
+      add(submit);
+      
+      confirm=new JButton("Place order");
+      confirm.setFocusable(false);
+      add(confirm);
+      
+      submit.addActionListener(new ActionListener() {
+    	  public void actionPerformed(ActionEvent a) {
+    		 bill(totalPizzaPrice, totalPrice);
+    		 isOrderplaced=true;
+    		 confirm.setEnabled(true);
+    	  }
+      });
+      
+      confirm.addActionListener(new ActionListener() {
+    	  public void actionPerformed(ActionEvent a) {
+    		  if(isOrderplaced) {
+    		  payment obj1=new payment();
+    		  dispose();
+    		  obj1.setTitle("Payment");
+    		  obj1.setBounds(300,100,400,400);
+    		  obj1.setVisible(true);
+    	  }
+    		  else {
+    			  JFrame f=new JFrame();
+    			  JOptionPane.showMessageDialog(f,"Please get the bill before placing order");
+    		  }
+    	  }
+      });
+	}
+	protected void bill(int totalPizzaprice, int totalPrice) {
+		// TODO Auto-generated method stub
+		bill=totalPizzaPrice+totalPrice;
+		billamt.setText("Your bill : Rs"+bill);
+		
+	}
+	public void updateTotalPrice(int toppingPrice) {
+		totalPrice=totalPrice+toppingPrice;
+		tplabel.setText("price of toppings:"+totalPrice);
+	}
+      	
+	}
+ 
+	private class payment extends JFrame{
+		JButton credit,debit,netbanking,upi,cod;
+		payment(){
+			setDefaultCloseOperation(EXIT_ON_CLOSE);
+			setLayout(null);
+			credit=new JButton("Credit card");
+			debit=new JButton("Debit card");
+			netbanking=new JButton("Netbanking");
+			upi=new JButton("UPI");
+			cod=new JButton("COD");
+			credit.setBounds(50, 20, 150, 30);
+			credit.setFocusable(false);
+			add(credit);
+			
+			debit.setBounds(50, 70, 150, 30);
+			debit.setFocusable(false);
+			add(debit);
+			
+			netbanking.setBounds(50, 120, 150, 30);
+			netbanking.setFocusable(false);
+			add(netbanking);
+			
+			upi.setBounds(50, 170, 150, 30);
+			upi.setFocusable(false);
+			add(upi);
+			
+			cod.setBounds(50, 220, 150, 30);
+			cod.setFocusable(false);
+			add(cod);
+			
+			credit.addActionListener(new ActionListener () {
+				public void actionPerformed(ActionEvent a) {
+					if(Pizza.dineinbutton.isSelected()|Pizza.takeawaybutton.isSelected()) {
+					JFrame f=new JFrame();
+					JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
+					dispose();
+				}
+					else if(Pizza.deliverybutton.isSelected()){
+						JFrame f=new JFrame();
+						JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Address: "+Pizza.t2.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
+						dispose();
+					}
+				}
+			});
+			
+			cod.addActionListener(new ActionListener () {
+				public void actionPerformed(ActionEvent a) {
+					if(Pizza.dineinbutton.isSelected()|Pizza.takeawaybutton.isSelected()) {
+						JFrame f=new JFrame();
+						JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
+						dispose();
+					}
+						else if(Pizza.deliverybutton.isSelected()){
+							JFrame f=new JFrame();
+							JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Address: "+Pizza.t2.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
+							dispose();
+						}
+				}
+			});
+			
+			debit.addActionListener(new ActionListener () {
+				public void actionPerformed(ActionEvent a) {
+					if(Pizza.dineinbutton.isSelected()|Pizza.takeawaybutton.isSelected()) {
+						JFrame f=new JFrame();
+						JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
+						dispose();
+					}
+						else if(Pizza.deliverybutton.isSelected()){
+							JFrame f=new JFrame();
+							JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Address: "+Pizza.t2.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
+							dispose();
+						}
+				}
+			});
+			
+			netbanking.addActionListener(new ActionListener () {
+				public void actionPerformed(ActionEvent a) {
+					if(Pizza.dineinbutton.isSelected()|Pizza.takeawaybutton.isSelected()) {
+						JFrame f=new JFrame();
+						JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
+						dispose();
+					}
+						else if(Pizza.deliverybutton.isSelected()){
+							JFrame f=new JFrame();
+							JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Address: "+Pizza.t2.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
+							dispose();
+						}
+				}
+			});
+			
+			upi.addActionListener(new ActionListener () {
+				public void actionPerformed(ActionEvent a) {
+					if(Pizza.dineinbutton.isSelected()|Pizza.takeawaybutton.isSelected()) {
+						JFrame f=new JFrame();
+						JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
+						dispose();
+					}
+						else if(Pizza.deliverybutton.isSelected()){
+							JFrame f=new JFrame();
+							JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Address: "+Pizza.t2.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
+							dispose();
+						}
+				}
+			});
+		}
+	}
+	private class CustomizationFrame extends JFrame{
+		 private cart parentCartFrame;
+		 private ArrayList<String> selectedToppings=new ArrayList<>();
+		 private int totalPrice=0;
+		JRadioButton small,medium,large;
+		ButtonGroup grp;
+		JLabel addon,size,toppings,pricecheese,pricechicken,pricesause,pricepaneer;
+		JCheckBox cheese,chicken,sause,panner;
+		JButton submit;
+		CustomizationFrame(cart parentCartFrame){
+			setLayout(null);
+			this.parentCartFrame = parentCartFrame;
+			//setDefaultCloseOperation(EXIT_ON_CLOSE);
+			addon=new JLabel("ADD-ONS");
+			addon.setBounds(200,20,300,30);
+			addon.setForeground(Color.black);
+			addon.setFont(new Font("Times New Roman",Font.PLAIN,14));
+			
+			cheese = new JCheckBox("Cheese");
+			cheese.setFont(new Font("Times New Roman",Font.PLAIN,14));
+			cheese.setFocusable(false);
+			cheese.setBounds(150,150,100,20);
+			add(cheese);
+	
+			chicken = new JCheckBox("Chicken");
+			chicken.setFont(new Font("Times New Roman",Font.PLAIN,14));
+			chicken.setBounds(150,180,100,20);
+			chicken.setFocusable(false);
+			add(chicken);
+
+			sause = new JCheckBox("Sause");
+			sause.setFont(new Font("Times New Roman",Font.PLAIN,14));
+			sause.setBounds(150,205,100,20);
+			sause.setFocusable(false);
+			add(sause);
+
+			panner = new JCheckBox("Panner");
+			panner.setFont(new Font("Times New Roman",Font.PLAIN,14));
+			panner.setFocusable(false);
+			panner.setBounds(150,235,100,20);
+			
+			toppings=new JLabel("Toppings");
+			toppings.setFont(new Font("Times New Roman",Font.PLAIN,14));
+			toppings.setBounds(20,150,100,20);
+			add(toppings);
+			add(panner);
+			add(addon);
+			
+			pricecheese=new JLabel("Price:70");
+			pricecheese.setBounds(300, 140, 300, 30);
+			add(pricecheese);
+			
+			pricechicken=new JLabel("Price:90");
+			pricechicken.setBounds(300, 170, 300, 30);
+			add(pricechicken);
+			
+			pricesause=new JLabel("Price:50");
+			pricesause.setBounds(300, 200, 300, 30);
+			add(pricesause);
+			
+			pricepaneer=new JLabel("Price:50");
+			pricepaneer.setBounds(300, 230, 300, 30);
+			add(pricepaneer);
+			
+			submit=new JButton("Submit");
+			submit.setBounds(150,270,80,20);
+			submit.setFocusable(false);
+			add(submit);
+			submit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent a) {
+					 if (parentCartFrame != null) {
+		                    parentCartFrame.updateTotalPrice(totalPrice);
+		                }
+					dispose();
+					  if (parentCartFrame != null) {
+		                    parentCartFrame.setVisible(true);
+		                }
+				}
+			});
+			
+			cheese.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent a) {
+					if(cheese.isSelected()) {
+						selectedToppings.add("cheese");
+						totalPrice+=70;
+					}
+				}
+			});
+			
+			chicken.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent a) {
+					if(chicken.isSelected()) {
+						selectedToppings.add("chicken");
+						totalPrice+=90;
+					}
+				}
+			});
+			sause.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent a) {
+					if(sause.isSelected()) {
+						selectedToppings.add("sause");
+						totalPrice+=50;
+					}
+				}
+			});
+			panner.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent a) {
+					if(panner.isSelected()) {
+						selectedToppings.add("paneer");
+						totalPrice+=50;
+					}
+				}
+			});
+			
+	}
+		private void updateTotalPrice(int toppingPrice) {
+			  if (parentCartFrame != null) {
+		            parentCartFrame.updateTotalPrice(totalPrice);
+		        }
+	    	}
+		}
+	}
+	public static void main(String [] args) {
+		login obj=new login();
+		obj.setBounds(400,150,500,500);
+		obj.setTitle("LOGIN");
+		obj.setVisible(true);
+	}
+}
