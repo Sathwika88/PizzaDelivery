@@ -4,8 +4,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.*;//for file writer class
 import java.util.ArrayList;
-class login extends JFrame{//login is class extending JFrame container
-	
+class login extends JFrame//login is class extending JFrame container
+{
 	JTextField t1,t2;
 	JButton b1,b2;
 	JLabel l1,l2,l3,l4,l5;
@@ -204,12 +204,12 @@ class login extends JFrame{//login is class extending JFrame container
 		JLabel address;
 		JLabel mobile;
 		JLabel type;
-		static JTextField t1;
-		static JTextField t2;
-		static JTextField t3;
-		static JRadioButton dineinbutton;
-		static JRadioButton  takeawaybutton;
-		static JRadioButton  deliverybutton;
+		JTextField t1;
+		JTextField t2;
+		JTextField t3;
+		JRadioButton dineinbutton;
+		JRadioButton  takeawaybutton;
+		JRadioButton  deliverybutton;
 		JButton submit;
 		Pizza(){
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -637,11 +637,9 @@ class cart extends JFrame{
       confirm.addActionListener(new ActionListener() {
     	  public void actionPerformed(ActionEvent a) {
     		  if(isOrderplaced) {
-    		  payment obj1=new payment();
-    		  dispose();
-    		  obj1.setTitle("Payment");
-    		  obj1.setBounds(300,100,400,400);
-    		  obj1.setVisible(true);
+    			  JFrame f=new JFrame();
+    			  JOptionPane.showMessageDialog(f,"Your Order is placed, Thankyov visit again!!!");
+    			  dispose();
     	  }
     		  else {
     			  JFrame f=new JFrame();
@@ -662,114 +660,7 @@ class cart extends JFrame{
 	}
       	
 	}
- 
-	private class payment extends JFrame{
-		JButton credit,debit,netbanking,upi,cod;
-		payment(){
-			setDefaultCloseOperation(EXIT_ON_CLOSE);
-			setLayout(null);
-			credit=new JButton("Credit card");
-			debit=new JButton("Debit card");
-			netbanking=new JButton("Netbanking");
-			upi=new JButton("UPI");
-			cod=new JButton("COD");
-			credit.setBounds(50, 20, 150, 30);
-			credit.setFocusable(false);
-			add(credit);
-			
-			debit.setBounds(50, 70, 150, 30);
-			debit.setFocusable(false);
-			add(debit);
-			
-			netbanking.setBounds(50, 120, 150, 30);
-			netbanking.setFocusable(false);
-			add(netbanking);
-			
-			upi.setBounds(50, 170, 150, 30);
-			upi.setFocusable(false);
-			add(upi);
-			
-			cod.setBounds(50, 220, 150, 30);
-			cod.setFocusable(false);
-			add(cod);
-			
-			credit.addActionListener(new ActionListener () {
-				public void actionPerformed(ActionEvent a) {
-					if(Pizza.dineinbutton.isSelected()|Pizza.takeawaybutton.isSelected()) {
-					JFrame f=new JFrame();
-					JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
-					dispose();
-				}
-					else if(Pizza.deliverybutton.isSelected()){
-						JFrame f=new JFrame();
-						JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Address: "+Pizza.t2.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
-						dispose();
-					}
-				}
-			});
-			
-			cod.addActionListener(new ActionListener () {
-				public void actionPerformed(ActionEvent a) {
-					if(Pizza.dineinbutton.isSelected()|Pizza.takeawaybutton.isSelected()) {
-						JFrame f=new JFrame();
-						JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
-						dispose();
-					}
-						else if(Pizza.deliverybutton.isSelected()){
-							JFrame f=new JFrame();
-							JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Address: "+Pizza.t2.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
-							dispose();
-						}
-				}
-			});
-			
-			debit.addActionListener(new ActionListener () {
-				public void actionPerformed(ActionEvent a) {
-					if(Pizza.dineinbutton.isSelected()|Pizza.takeawaybutton.isSelected()) {
-						JFrame f=new JFrame();
-						JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
-						dispose();
-					}
-						else if(Pizza.deliverybutton.isSelected()){
-							JFrame f=new JFrame();
-							JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Address: "+Pizza.t2.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
-							dispose();
-						}
-				}
-			});
-			
-			netbanking.addActionListener(new ActionListener () {
-				public void actionPerformed(ActionEvent a) {
-					if(Pizza.dineinbutton.isSelected()|Pizza.takeawaybutton.isSelected()) {
-						JFrame f=new JFrame();
-						JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
-						dispose();
-					}
-						else if(Pizza.deliverybutton.isSelected()){
-							JFrame f=new JFrame();
-							JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Address: "+Pizza.t2.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
-							dispose();
-						}
-				}
-			});
-			
-			upi.addActionListener(new ActionListener () {
-				public void actionPerformed(ActionEvent a) {
-					if(Pizza.dineinbutton.isSelected()|Pizza.takeawaybutton.isSelected()) {
-						JFrame f=new JFrame();
-						JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
-						dispose();
-					}
-						else if(Pizza.deliverybutton.isSelected()){
-							JFrame f=new JFrame();
-							JOptionPane.showMessageDialog(f, "Billing Details"+"\n"+"Name: "+Pizza.t1.getText()+"\n"+"Address: "+Pizza.t2.getText()+"\n"+"Mobile Number: "+Pizza.t3.getText());
-							dispose();
-						}
-				}
-			});
-		}
-	}
-	private class CustomizationFrame extends JFrame{
+	class CustomizationFrame extends JFrame{
 		 private cart parentCartFrame;
 		 private ArrayList<String> selectedToppings=new ArrayList<>();
 		 private int totalPrice=0;
@@ -897,4 +788,4 @@ class cart extends JFrame{
 		obj.setTitle("LOGIN");
 		obj.setVisible(true);
 	}
-}
+	}
